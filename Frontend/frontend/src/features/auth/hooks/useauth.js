@@ -12,18 +12,28 @@ export const useAuth = ()=>{
          const data = await login({email,password})  
         setUser(data.user)
      }catch (err){
-        console.log()
+        console.log(err.response?.data || err.message)
      }finally{
         setLoading(false)
      } 
 }
 
    const handleRegister = async ({username,email,password})=>{
-     setLoading(true)   
-     const data = await register({username,email,password})  
-     setUser(data.user)
-     setLoading(false)
-   }
+  setLoading(true)
+
+  try{
+     const data = await register({username,email,password})
+
+     if(data){
+        setUser(data.user)
+     }
+
+  }catch(err){
+      console.log(err)
+  }finally{
+      setLoading(false)
+  }
+}
 
    //  useEffect(()=>{
    //      const getAndSetUser = async()=>{
@@ -47,7 +57,7 @@ export const useAuth = ()=>{
      const data = await logout()  
      setUser(null)                                            
     }catch(err){
-        console.log();
+        console.log(err);
     }finally{
         setLoading(false)                                           
     }

@@ -45,7 +45,7 @@ async function registerUserController(req,res){
    // Set cookie with options for cross-site dev authentication
    res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: true,
       sameSite: 'none',
       path: '/',
       maxAge: 24 * 60 * 60 * 1000
@@ -106,7 +106,7 @@ async function loginUserController(req, res) {
    // Set cookie with options for cross-site dev authentication
    res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: true,
       sameSite: 'none',
       path: '/',
       maxAge: 24 * 60 * 60 * 1000
