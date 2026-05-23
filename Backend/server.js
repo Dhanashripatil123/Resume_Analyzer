@@ -7,6 +7,10 @@ const connectTOB = require("./src/config/databse");
 connectTOB();
 
 // Start Server
-app.listen(3000, () => {
-   console.log("server is running port 3000");
+// app.listen(3000, () => {
+//    console.log("server is running port 3000");
+// });
+
+app.get("/", (req, res) => {
+   res.send("Backend Working");
 });
