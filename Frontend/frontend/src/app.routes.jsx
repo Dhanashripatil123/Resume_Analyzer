@@ -1,4 +1,4 @@
-import { createHashRouter } from "react-router";
+import { createHashRouter, Navigate } from "react-router-dom";
 import Login from "./features/auth/pages/Login";
 import Register from "./features/auth/pages/register"; 
 import Landing from "./features/auth/pages/Landing";
@@ -26,5 +26,9 @@ export const router = createHashRouter([
  {
   path:"/interview/:interviewId",
   element:<Protected><Interview/></Protected>
+ },
+ {
+  path:"*",
+  element:<Navigate to="/login" replace />
  }
 ])
