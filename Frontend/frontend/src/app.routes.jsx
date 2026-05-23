@@ -1,4 +1,4 @@
-import { createHashRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Login from "./features/auth/pages/Login";
 import Register from "./features/auth/pages/register"; 
 import Landing from "./features/auth/pages/Landing";
@@ -6,7 +6,7 @@ import Protected from "./features/auth/components/protected";
 import InterviewHome from "./features/interview/pages/Home";
 import Interview from "./features/interview/pages/interview";
 
-export const router = createHashRouter([
+export const router = createBrowserRouter([
  {
      path:"/",
      element:<Landing/>
@@ -26,6 +26,10 @@ export const router = createHashRouter([
  {
   path:"/interview/:interviewId",
   element:<Protected><Interview/></Protected>
+ },
+ {
+  path:"/interview-home/login",
+  element:<Navigate to="/login" replace />
  },
  {
   path:"*",
