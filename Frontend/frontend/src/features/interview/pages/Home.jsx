@@ -15,11 +15,11 @@ const Home = () => {
   const navigate = useNavigate()
 
   const handleFileSelect = (file) => {
-    if (file && (file.type === 'application/pdf' || file.type === 'application/msword' || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+    if (file && file.type === 'application/pdf') {
       setResumeFile(file)
       setError("")
     } else {
-      setError("Please upload a PDF or DOCX file")
+      setError("Please upload a PDF file")
     }
   }
 
@@ -150,7 +150,7 @@ const Home = () => {
             ref={resumeRef}
             type='file' 
             hidden 
-            accept='.pdf,.doc,.docx'
+            accept='.pdf'
             onChange={(e) => handleFileSelect(e.target.files[0])}
           />
 
@@ -164,7 +164,7 @@ const Home = () => {
             />
           </div>
 
-          <p className='note'>Either a Resume or a Self Description is required to generate a personalized plan.</p>
+          <p className='note'>Either a PDF Resume or a Self Description is required to generate a personalized plan.</p>
         </article>
       </section>
 

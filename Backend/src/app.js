@@ -34,4 +34,13 @@ app.use("/api/auth",authRouter)
 app.use("/api/interview",interviewRouter)
 app.set("trust proxy", 1);
 
+app.use((err, req, res, next) => {
+  if (err && err.message && err.message.includes("Only PDF files")) {
+    return res.status(400).json({ message: err.message })
+  }
+
+  console.error("Unhandled server error:", err)
+  res.status(500).json({ message: "Server error", error: err?.message || "Unknown error" })
+})
+
 module.exports = app

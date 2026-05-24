@@ -5,6 +5,15 @@ const api = axios.create({
     withCredentials:true
 })
 
+api.interceptors.request.use((config)=>{
+    const token = localStorage.getItem("token")
+    if(token){
+        config.headers = config.headers || {}
+        config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+})
+
 export async function register({username,email,password}){
 
      try{                                                 
@@ -21,13 +30,13 @@ export async function register({username,email,password}){
 export async function login({email,password}){
    try{
        const response = await api.post("/api/auth/login",{
-         email,password                                         
+         email,password
        })
-
        return response.data
-}catch(err){
-     console.log(err)
-}
+   }catch(err){
+     console.error(err)
+     throw err
+   }
 }
 
 export async function logout(){

@@ -9,14 +9,14 @@ const authRouter = Router()
 * @access Public
 */
 
-authRouter.post("/register",authmiddleware.authUser, authController.registerUserController)
+authRouter.post("/register", authController.registerUserController)
 
 /**
  * @route POST /api/auth/login
  * @description login user with email and password
  * @access public  
  */
-authRouter.post("/login",authmiddleware.authUser, authController.loginUserController)
+authRouter.post("/login", authController.loginUserController)
 
 /**
  * @route GET /api/auth/logout

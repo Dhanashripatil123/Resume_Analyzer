@@ -12,8 +12,8 @@ async function generateIntrviewReportController(req, res) {
     let resumeContent = ""
 
     if (req.file) {
-      const pdfData = await new pdfParse.PDFParse(Uint8Array.from(req.file.buffer)).getText()
-      resumeContent = pdfData.text
+      const pdfData = await pdfParse(req.file.buffer)
+      resumeContent = pdfData.text || ""
     }
 
     if (!req.file && !selfDescription) {
@@ -33,7 +33,7 @@ async function generateIntrviewReportController(req, res) {
     console.log("AI RESPONSE => ", interviewReportByAi)
 
     const interviewReportData = {
-      user: null,
+      user: req.user?.id || null,
       resume: resumeContent,
       selfDescription,
       jobDescription,

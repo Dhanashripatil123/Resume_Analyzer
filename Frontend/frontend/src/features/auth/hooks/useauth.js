@@ -9,16 +9,24 @@ export const useAuth = ()=>{
    const handleLogin = async ({email,password})=>{
      setLoading(true)
      try{
-         const data = await login({email,password})  
-        setUser(data.user)
+         const data = await login({email,password})
+         setUser(data.user)
+         localStorage.setItem("token", data.token)
+         return data
      }catch (err){
+<<<<<<< HEAD
         console.log(err.response?.data || err.message)
+=======
+        console.error(err)
+        throw err
+>>>>>>> f7887e4 (restore file)
      }finally{
         setLoading(false)
-     } 
+     }
 }
 
    const handleRegister = async ({username,email,password})=>{
+<<<<<<< HEAD
   setLoading(true)
 
   try{
@@ -34,6 +42,14 @@ export const useAuth = ()=>{
       setLoading(false)
   }
 }
+=======
+     setLoading(true)   
+     const data = await register({username,email,password})  
+     setUser(data.user)
+     localStorage.setItem("token", data.token)
+     setLoading(false)
+   }
+>>>>>>> f7887e4 (restore file)
 
    //  useEffect(()=>{
    //      const getAndSetUser = async()=>{
@@ -52,6 +68,7 @@ export const useAuth = ()=>{
    //  },[])
 
    const handleLogout = async ()=>{
+<<<<<<< HEAD
      setLoading(true)   
     try{
      const data = await logout()  
@@ -62,6 +79,18 @@ export const useAuth = ()=>{
         setLoading(false)                                           
     }
     
+=======
+     setLoading(true)
+     try{
+       await logout()
+       setUser(null)
+       localStorage.removeItem("token")
+     }catch(err){
+       console.error(err)
+     }finally{
+       setLoading(false)
+     }
+>>>>>>> f7887e4 (restore file)
    }
 
    return {user,loading,handleRegister,handleLogin,handleLogout}
