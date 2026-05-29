@@ -119,7 +119,7 @@ ${jobDescription}
   try {
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-lite",
+      model: "gemini-2.5-pro",
       contents: prompt,
       config: {
         temperature: 0,
@@ -210,7 +210,7 @@ The resume should be not be so long, it should ideally fit in 1-2 pages when con
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-lite",
+      model: "gemini-2.5-pro",
       contents: prompt,
       config: {
         temperature: 0,
