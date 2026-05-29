@@ -2,7 +2,7 @@ const { GoogleGenAI } = require("@google/genai");
 const { z } = require("zod");
 const { zodToJsonSchema } = require("zod-to-json-schema");
 require("dotenv").config();
-const puppeteer = await import("puppeteer");
+const puppeteer = require("puppeteer");
 
 const ai = new GoogleGenAI({
   apiKey: process.env.GOOGLE_GENAI_API_KEY,
@@ -119,7 +119,7 @@ ${jobDescription}
   try {
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-pro",
+      model: "gemini-2.5-flash",
       contents: prompt,
       config: {
         temperature: 0,
@@ -210,7 +210,7 @@ The resume should be not be so long, it should ideally fit in 1-2 pages when con
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-pro",
+      model: "gemini-2.5-flash",
       contents: prompt,
       config: {
         temperature: 0,
