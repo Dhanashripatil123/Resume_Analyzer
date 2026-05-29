@@ -3,7 +3,6 @@ const authMiddleware = require("../middeleware/auth.middleware")
 const interviewController = require("../controllers/interview.controller")
 const interviewRouter = express.Router()
 const upload = require("../middeleware/file.middleware")
-const generateResumeController = require("../controllers/interview.controller")
 
 
 /**

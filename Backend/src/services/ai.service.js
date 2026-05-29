@@ -154,14 +154,27 @@ ${jobDescription}
 }
 
 async function generateFromHtml(htmlContent) {
-  
-     const browser = await puppeteer.launch(); 
-      const page = await browser.newPage();
-      await  page.setContent(htmlContent,{ waitUntil: "networkidle0" });
-      const pdfBuffer = await page.pdf({format:"A4",margin:{top:"20mm",bottom:"20mm",left:"15mm",right:"15mm"}});
-      await browser.close();
-      return pdfBuffer;
-  }
+  const browser = await puppeteer.launch({
+    headless: "new",
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-accelerated-2d-canvas",
+      "--no-first-run",
+      "--no-zygote",
+      "--single-process"
+    ],
+  })
+  const page = await browser.newPage()
+  await page.setContent(htmlContent, { waitUntil: "networkidle0" })
+  const pdfBuffer = await page.pdf({
+    format: "A4",
+    margin: { top: "20mm", bottom: "20mm", left: "15mm", right: "15mm" },
+  })
+  await browser.close()
+  return pdfBuffer
+}
 
 async function generateResumePdf({
   resume,
@@ -195,28 +208,56 @@ the content should be ATS friendly and should include relevant keywords from the
 The resume should be not be so long, it should ideally fit in 1-2 pages when converted to PDF. focus on quality rather than quantity. Do not add any explanations or extra text, return only the JSON response with the HTML content.
 `
 
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash-lite",
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash-lite",
+      contents: prompt,
+      config: {
+        temperature: 0,
+      },
+    })
 
-    contents: prompt,
+    const rawText = response.text?.trim()
+    if (!rawText) {
+      throw new Error("Empty response from Gemini resume generator")
+    }
 
-    config: {
-      responseMimeType: "application/json",
+    const cleanedText = rawText
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim()
 
-      responseJsonSchema:
-        zodToJsonSchema(resumepdfSchema),
-    },
-  })
+    let jsonContent
+    try {
+      jsonContent = JSON.parse(cleanedText)
+    } catch (parseErr) {
+      const jsonMatch = cleanedText.match(/\{[\s\S]*\}$/)
+      if (jsonMatch) {
+        try {
+          jsonContent = JSON.parse(jsonMatch[0])
+        } catch (innerErr) {
+          throw new Error(
+            `Invalid JSON returned from resume generator: ${innerErr.message}. Raw output: ${cleanedText.substring(0, 500)}`
+          )
+        }
+      } else {
+        throw new Error(
+          `Invalid JSON returned from resume generator: ${parseErr.message}. Raw output: ${cleanedText.substring(0, 500)}`
+        )
+      }
+    }
 
-  const rawText = response.text?.trim()
+    if (!jsonContent?.html) {
+      throw new Error("Resume generator did not return an HTML field. Raw output: " + cleanedText.substring(0, 500))
+    }
 
-  const jsonContent = JSON.parse(rawText)
+    const pdfBuffer = await generateFromHtml(jsonContent.html)
 
-  const pdfBuffer = await generateFromHtml(
-    jsonContent.html
-  )
-
-  return pdfBuffer
+    return pdfBuffer
+  } catch (error) {
+    console.error("Resume PDF generation error:", error)
+    throw new Error(`Resume PDF generation failed: ${error.message}`)
+  }
 }
 
 module.exports = {
