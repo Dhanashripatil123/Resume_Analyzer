@@ -183,16 +183,25 @@ ${jobDescription}
   }
 }
 
+
+
+ 
+
+
+
 async function generateFromHtml(htmlContent) {
 
-  async function generateFromHtml(htmlContent) { 
-    const browser = await puppeteer.launch({ 
-       args: chromium.args,
-       defaultViewport: chromium.defaultViewport,
-       executablePath: await chromium.executablePath(), 
-       headless: chromium.headless
-       });
-    }
+  const executablePath = await chromium.executablePath();
+
+  console.log("CHROMIUM PATH => ", executablePath);
+
+  const browser = await puppeteer.launch({
+    executablePath,
+    args: chromium.args,
+    headless: true,
+    defaultViewport: chromium.defaultViewport,
+  });
+
   const page = await browser.newPage();
 
   await page.setContent(htmlContent, {
@@ -201,18 +210,26 @@ async function generateFromHtml(htmlContent) {
 
   const pdfBuffer = await page.pdf({
     format: "A4",
+    printBackground: true,
     margin: {
       top: "20mm",
       bottom: "20mm",
       left: "15mm",
       right: "15mm",
     },
-  });
-
-  await browser.close();
+  })
+   await browser.close();
 
   return pdfBuffer;
-}
+  };
+
+ 
+
+
+
+
+
+ 
 
 async function generateResumePdf({
   resume,
