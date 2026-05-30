@@ -54,7 +54,7 @@ async function generateInterviewReport({
 
   const prompt = `
 You are an expert ATS Resume Optimizer and Technical Recruiter.
-
+Return ONLY valid JSON.
 Your task is to analyze both the Job Description and the Candidate Resume.
 
 Instructions:
@@ -248,7 +248,7 @@ async function generateResumePdf({
 
   const prompt = `
 Generate a professional ATS-friendly resume in HTML format.
-
+Return ONLY valid JSON.
 Resume:
 ${resume}
 
