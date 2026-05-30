@@ -53,21 +53,36 @@ async function generateInterviewReport({
 }) {
 
   const prompt = `
-You are a professional AI interview preparation assistant.
+You are an expert ATS Resume Optimizer and Technical Recruiter.
 
-Generate a COMPLETE interview report in STRICT VALID JSON format.
+Your task is to analyze both the Job Description and the Candidate Resume.
 
-IMPORTANT RULES:
-1. Return ONLY pure JSON
-2. Do NOT use markdown
-3. Do NOT add explanations
-4. Do NOT add extra text
-5. Do NOT wrap JSON inside backticks
-6. Ensure JSON is always valid
-7. Every field is required
-8. Keep responses concise and professional
-9. matchScore must be between 0 and 100
-10. severity must be only: low, medium, or high
+Instructions:
+
+1. Extract all important technical skills, tools, frameworks, platforms, methodologies, and keywords from the Job Description.
+2. Extract all existing skills from the Candidate Resume.
+3. Compare both lists and identify missing skills.
+4. If a missing skill is relevant to the candidate's background, projects, education, or experience, incorporate it naturally into:
+
+   * Skills section
+   * Projects section
+   * Experience section
+   * Summary section
+5. Improve ATS compatibility by including important keywords from the Job Description.
+6. Preserve all truthful information from the original resume.
+7. Do NOT invent fake companies, internships, certifications, projects, achievements, or years of experience.
+8. Rewrite bullet points to better match the Job Description.
+9. Keep the resume concise, professional, and recruiter-friendly.
+10. Return the COMPLETE optimized resume content.
+
+Special Rules:
+
+* If the Job Description contains technologies such as Docker, Jira, AWS, Kubernetes, Jenkins, Spring Boot, React, Node.js, MongoDB, SQL, REST APIs, Agile, Git, etc., ensure they appear in the resume when reasonably relevant.
+* Add missing keywords naturally instead of simply listing them.
+* Increase ATS keyword coverage while maintaining authenticity.
+* Prioritize Skills, Projects, and Technical Summary sections for keyword optimization.
+
+
 
 JSON FORMAT:
 
@@ -183,12 +198,6 @@ ${jobDescription}
   }
 }
 
-
-
- 
-
-
-
 async function generateFromHtml(htmlContent) {
 
   const executablePath = await chromium.executablePath();
@@ -249,11 +258,12 @@ ${selfDescription}
 Job Description:
 ${jobDescription}
 
-IMPORTANT RULES:
-1. Return ONLY valid JSON
-2. Do NOT use markdown
-3. Do NOT add explanations
-4. Return JSON with ONLY one field called "html"
+Special Rules:
+
+If the Job Description contains technologies such as Docker, Jira, AWS, Kubernetes, Jenkins, Spring Boot, React, Node.js, MongoDB, SQL, REST APIs, Agile, Git, etc., ensure they appear in the resume when reasonably relevant.
+Add missing keywords naturally instead of simply listing them.
+Increase ATS keyword coverage while maintaining authenticity.
+Prioritize Skills, Projects, and Technical Summary sections for keyword optimization.
 
 JSON FORMAT:
 
